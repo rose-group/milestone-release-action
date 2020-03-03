@@ -29,7 +29,7 @@ try {
             // TODO - Remove issues from Milestone?
 
         } else {
-            console.log(`Milestone has no issues open.`);
+            console.log(`Milestone ${milestone.title} has no issues open.`);
         }
 
         octokit.issues.updateMilestone({
@@ -38,6 +38,8 @@ try {
             milestone_number: milestone.number,
             state: "closed"
         });
+
+        console.log(`Closed Milestone ${milestone.title}`);
 
         const options = octokit.issues.listForRepo.endpoint.merge({
             owner: github.context.repo.owner,
@@ -51,6 +53,8 @@ try {
                 notes = notes + "- #" + issue.number + " " + issue.title + "\n";
             }
 
+            console.log(`Generated change log:\n ${notes}`);
+
             octokit.repos.createRelease({
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
@@ -58,7 +62,9 @@ try {
                 name: milestoneTitle,
                 draft: false,
                 body: notes
-            })
+            });
+
+            console.log(`Created Release ${milestone.title}`);
         });
 
     }).catch((error) => {
