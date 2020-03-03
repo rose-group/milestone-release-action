@@ -36,7 +36,7 @@ try {
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
             milestone_number: milestone.number,
-            state: "closed"
+            state: 'closed'
         });
 
         console.log(`Closed Milestone ${milestone.title}`);
@@ -44,7 +44,8 @@ try {
         const options = octokit.issues.listForRepo.endpoint.merge({
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
-            milestone: milestone.number
+            milestone: milestone.number,
+            state: 'closed'
         });
 
         octokit.paginate(options).then(issues => {
