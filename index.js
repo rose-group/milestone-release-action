@@ -35,6 +35,7 @@ try {
         octokit.issues.updateMilestone({
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
+            milestone_number: milestone.number,
             state: "closed"
         });
 
