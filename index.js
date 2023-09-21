@@ -3,6 +3,7 @@ const github = require('@actions/github');
 
 try {
     const milestoneTitle = core.getInput('milestone-title');
+    const milestoneNext = core.getInput('milestone-next')
     console.log(`Checking Milestone ${milestoneTitle}`);
 
     const octokit = new github.GitHub(core.getInput('github-token'));
@@ -40,6 +41,22 @@ try {
         });
 
         console.log(`Closed Milestone ${milestone.title}`);
+
+        if (milestoneNext != null) {
+            var milestoneTitleCreate = milestoneNext.replace("-SNAPSHOT", "");
+            let milestone = data.find(function (milestone) {
+                return milestone.title === milestoneTitleCreate;
+            });
+            if (milestone == null) {
+                octokit.issues.createMilestone({
+                    owner: github.context.repo.owner,
+                    repo: github.context.repo.repo,
+                    title: milestoneTitleCreate
+                })
+
+                console.log(`Created Milestone ${milestoneTitleCreate}`);
+            }
+        }
 
         const options = octokit.issues.listForRepo.endpoint.merge({
             owner: github.context.repo.owner,

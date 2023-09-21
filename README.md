@@ -6,6 +6,7 @@ to the Milestone. The main purpose is to help with post actions for the project 
 - Search the given Milestone
 - Report Open Issues
 - Close the Milestone
+- Create the next Milestone
 - Generate Changelog from the closed issues associated with the Milestone
 - Create Project Release with the Changelog 
 
@@ -22,10 +23,14 @@ Action itself. Use this if you want to pass in your own Personal Access Token.
 
 **Required** The Milestone Title to search for in the Repository.
 
+### `milestone-next`
+
+**Optional** The Milestone Title to create in the Repository.
+
 ## Example usage
 
 ```yaml
-- uses: radcortez/milestone-release-action@master
+- uses: radcortez/milestone-release-action@main
   name: milestone release
   with:
     github-token: ${{secrets.GITHUB_TOKEN}}
@@ -36,7 +41,7 @@ Most likely you want for the `milestone-title` to be dynamic. You could retrieve
 your context, by querying something in your project that provides you that information and then pass it as a variable:
 
 ```yaml
-- uses: radcortez/milestone-release-action@master
+- uses: radcortez/milestone-release-action@main
   name: milestone release
   with:
     github-token: ${{secrets.GITHUB_TOKEN}}
