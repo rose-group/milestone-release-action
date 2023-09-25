@@ -42,7 +42,7 @@ try {
 
         console.log(`Closed Milestone ${milestone.title}`);
 
-        if (milestoneNext != null) {
+        if (milestoneNext != null && milestoneNext.length > 0) {
             var milestoneTitleCreate = milestoneNext.replace("-SNAPSHOT", "");
             let milestone = data.find(function (milestone) {
                 return milestone.title === milestoneTitleCreate;
