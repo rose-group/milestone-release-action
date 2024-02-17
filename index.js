@@ -2,15 +2,18 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 
 try {
+    const token = core.getInput('github-token');
+    const ghOwner = github.context.repo.owner;
+    const ghRepo = github.context.repo.repo;
     const milestoneTitle = core.getInput('milestone-title');
-    const milestoneNext = core.getInput('milestone-next')
+    const milestoneNext = core.getInput('milestone-next');
     console.log(`Checking Milestone ${milestoneTitle}`);
 
-    const octokit = new github.GitHub(core.getInput('github-token'));
+    const octokit = github.getOctokit(token);
 
-    octokit.issues.listMilestonesForRepo({
-        owner: github.context.repo.owner,
-        repo: github.context.repo.repo,
+    octokit.rest.issues.listMilestones({
+        owner: ghOwner,
+        repo: ghRepo,
     }).then(({data}) => {
 
         let milestone = data.find(function (milestone) {
@@ -33,9 +36,9 @@ try {
             console.log(`Milestone ${milestone.title} has no issues open.`);
         }
 
-        octokit.issues.updateMilestone({
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
+        octokit.rest.issues.updateMilestone({
+            owner: ghOwner,
+            repo: ghRepo,
             milestone_number: milestone.number,
             state: 'closed'
         });
@@ -48,9 +51,9 @@ try {
                 return milestone.title === milestoneTitleCreate;
             });
             if (milestone == null) {
-                octokit.issues.createMilestone({
-                    owner: github.context.repo.owner,
-                    repo: github.context.repo.repo,
+                octokit.rest.issues.createMilestone({
+                    owner: ghOwner,
+                    repo: ghRepo,
                     title: milestoneTitleCreate
                 })
 
@@ -58,9 +61,9 @@ try {
             }
         }
 
-        const options = octokit.issues.listForRepo.endpoint.merge({
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
+        const options = octokit.rest.issues.listForRepo.endpoint.merge({
+            owner: ghOwner,
+            repo: ghRepo,
             milestone: milestone.number,
             state: 'closed'
         });
@@ -73,9 +76,9 @@ try {
 
             console.log(`Generated change log:\n ${notes}`);
 
-            octokit.repos.createRelease({
-                owner: github.context.repo.owner,
-                repo: github.context.repo.repo,
+            octokit.rest.repos.createRelease({
+                owner: ghOwner,
+                repo: ghRepo,
                 tag_name: milestoneTitle,
                 name: milestoneTitle,
                 draft: false,
