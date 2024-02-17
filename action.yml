@@ -1,5 +1,8 @@
 name: 'Milestone Release Action'
 description: 'Creates a Release with a changelog from a Milestone'
+branding:
+  icon: package
+  color: red
 inputs:
   github-token:
     description: 'The GitHub token used to create an authenticated client'
