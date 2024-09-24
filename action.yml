@@ -11,6 +11,10 @@ inputs:
   milestone-title:
     description: 'The milestone to release'
     required: true
+  milestone-next:
+    description: 'The next milestone'
+    required: false
+    
 runs:
   using: 'node20'
   main: 'index.js'
