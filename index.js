@@ -60,34 +60,6 @@ try {
                 console.log(`Created Milestone ${milestoneTitleCreate}`);
             }
         }
-
-        const options = octokit.rest.issues.listForRepo.endpoint.merge({
-            owner: ghOwner,
-            repo: ghRepo,
-            milestone: milestone.number,
-            state: 'closed'
-        });
-
-        octokit.paginate(options).then(issues => {
-            let notes = "";
-            for (const issue of issues) {
-                notes = notes + "- #" + issue.number + " " + issue.title + "\n";
-            }
-
-            console.log(`Generated change log:\n ${notes}`);
-
-            octokit.rest.repos.createRelease({
-                owner: ghOwner,
-                repo: ghRepo,
-                tag_name: milestoneTitle,
-                name: milestoneTitle,
-                draft: false,
-                body: notes
-            });
-
-            console.log(`Created Release ${milestone.title}`);
-        });
-
     }).catch((error) => {
         console.debug(error);
         core.setFailed('Unknown Error!')
