@@ -58,6 +58,8 @@ try {
                 })
 
                 console.log(`Created Milestone ${milestoneTitleCreate}`);
+            } else {
+                console.log(`Milestone ${milestoneTitleCreate} has exists !`);
             }
         }
     }).catch((error) => {
