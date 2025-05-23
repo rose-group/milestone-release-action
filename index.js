@@ -22,28 +22,25 @@ try {
 
         if (milestone == null) {
             console.log(`Milestone ${milestoneTitle} Not Found!`);
-            return;
-        }
-
-        console.log(`Found Milestone ${milestone.title}`);
-
-        if (milestone.open_issues > 0) {
-            console.log(`Milestone ${milestone.title} still has ${milestone.open_issues} open issues!`);
-
-            // TODO - Remove issues from Milestone?
-
         } else {
-            console.log(`Milestone ${milestone.title} has no issues open.`);
+            console.log(`Found Milestone ${milestone.title}`);
+
+            if (milestone.open_issues > 0) {
+                console.log(`Milestone ${milestone.title} still has ${milestone.open_issues} open issues!`);
+                // TODO - Remove issues from Milestone?
+            } else {
+                console.log(`Milestone ${milestone.title} has no issues open.`);
+            }
+    
+            octokit.rest.issues.updateMilestone({
+                owner: ghOwner,
+                repo: ghRepo,
+                milestone_number: milestone.number,
+                state: 'closed'
+            });
+    
+            console.log(`Closed Milestone ${milestone.title}`);
         }
-
-        octokit.rest.issues.updateMilestone({
-            owner: ghOwner,
-            repo: ghRepo,
-            milestone_number: milestone.number,
-            state: 'closed'
-        });
-
-        console.log(`Closed Milestone ${milestone.title}`);
 
         if (milestoneNext != null && milestoneNext.length > 0) {
             var milestoneTitleCreate = milestoneNext.replace("-SNAPSHOT", "");
